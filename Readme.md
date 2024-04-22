@@ -1,3 +1,3 @@
-## java-dev14-spring-boot
+## java-dev15-spring-boot-mvc
 
-### Spring Boot
+### Spring Boot MVC

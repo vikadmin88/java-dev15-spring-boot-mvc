@@ -1,14 +1,16 @@
 package org.springtest;
 
-import org.springtest.entity.Note;
-import org.springtest.repository.NoteRepository;
-import org.springtest.services.NoteService;
-import org.springtest.services.NoteServiceImpl;
+import org.springtest.data.entity.Note;
+import org.springtest.data.repository.NoteRepository;
+import org.springtest.service.exception.NoteNotFoundException;
+import org.springtest.service.service.NoteService;
+import org.springtest.service.service.NoteServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.UUID;
 
 public class NoteServiceImplTests {
 
@@ -28,12 +30,11 @@ public class NoteServiceImplTests {
         Note noteObj = noteService.add(note);
 
         //Then
-        int expected = 0;
-        Assertions.assertTrue(noteObj.getId() != expected);
+        Assertions.assertNotNull(noteObj.getId());
     }
 
     @Test
-    void testGetById() {
+    void testGetById() throws NoteNotFoundException {
         //When
         note.setTitle("TEST");
         Note noteAdded = noteService.add(note);
@@ -45,7 +46,7 @@ public class NoteServiceImplTests {
     }
 
     @Test
-    void testUpdate() {
+    void testUpdate() throws NoteNotFoundException {
         //When
         Note noteAdded = noteService.add(note);
         noteAdded.setTitle("UPDATED");
@@ -58,7 +59,7 @@ public class NoteServiceImplTests {
     }
 
     @Test
-    void testDelete() {
+    void testDelete() throws NoteNotFoundException {
         //When
         Note noteAdded = noteService.add(note);
         List<Note> listNotes = noteService.listAll();
@@ -84,27 +85,22 @@ public class NoteServiceImplTests {
     }
 
     @Test
-    void testUpdateIllegalArgumentException() {
+    void testUpdateNoteNotFoundException() {
         //When-Then
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            noteService.update(note);
-        });
+        Assertions.assertThrows(NoteNotFoundException.class, () -> noteService.update(note));
     }
 
     @Test
-    void testDeleteIllegalArgumentException() {
+    void testDeleteNoteNotFoundException() {
         //When-Then
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            noteService.deleteById(note.getId());
-        });
+        Assertions.assertThrows(NoteNotFoundException.class, () -> noteService.deleteById(note.getId()));
     }
 
     @Test
-    void testGetByIdIllegalArgumentException() {
+    void testGetByIdNoteNotFoundException() {
         //When-Then
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            noteService.getById(0);
-        });
+        UUID id = UUID.randomUUID();
+        Assertions.assertThrows(NoteNotFoundException.class, () -> noteService.getById(id));
     }
 
 }

@@ -1,12 +1,14 @@
-package org.springtest.entity;
+package org.springtest.data.entity;
 
 import lombok.Data;
+
+import java.util.UUID;
 
 
 @Data
 public class Note {
 
-    private long id;
+    private UUID id;
     private String title;
     private String content;
 }
